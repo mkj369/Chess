@@ -1,0 +1,6 @@
+# Build-time dependencies (the app itself is fully offline at runtime)
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*

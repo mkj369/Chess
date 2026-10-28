@@ -1,0 +1,24 @@
+{
+  "name": "mkj-chess",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MKJ Chess — a complete, fully offline chess platform. Think. Calculate. Conquer.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "test:rules": "node --test tests/rules.test.js",
+    "test:engine": "node --test tests/engine.test.js",
+    "test:app": "node --test tests/app.test.js",
+    "perft": "node tools/perft.js",
+    "bench": "node tools/bench.js",
+    "start": "python3 -m http.server 5173 --bind 0.0.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "jsdom": "^30.1.3"
+  }
+}

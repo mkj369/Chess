@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MKJ Chess — Think. Calculate. Conquer.</title>
+<meta name="description" content="MKJ Chess — a complete, polished, fully offline chess platform. Created by MKJ.">
+<meta name="theme-color" content="#0d0e12">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d0e12'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' font-weight='700' text-anchor='middle' fill='%23c6a158'%3EMKJ%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d0e12'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' font-weight='700' text-anchor='middle' fill='%23c6a158'%3EMKJ%3C/text%3E%3C/svg%3E">
+<meta name="application-name" content="MKJ Chess">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ==================== MKJ CHESS SPRITE (vector pieces + icons) ==================== -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <defs>
+<linearGradient id="wpawn-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdf6e3"/>
+      <stop offset="0.5" stop-color="#efe3c4"/>
+      <stop offset="1" stop-color="#cdb98a"/>
+    </linearGradient>
+    <linearGradient id="wpawn-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7e08a"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#8a6a12"/>
+    </linearGradient>
+    <radialGradient id="wpawn-hi" cx="0.4" cy="0.32" r="0.62">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="wpawn-sh" cx="0.68" cy="0.8" r="0.5">
+      <stop offset="0" stop-color="#000000" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  
+
+    <linearGradient id="bpawn-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6a5a48"/>
+      <stop offset="0.5" stop-color="#2e2618"/>
+      <stop offset="1" stop-color="#15100a"/>
+    </linearGradient>
+    <linearGradient id="bpawn-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7e08a"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#8a6a12"/>
+    </linearGradient>
+    <radialGradient id="bpawn-hi" cx="0.4" cy="0.32" r="0.62">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bpawn-sh" cx="0.68" cy="0.8" r="0.5">
+      <stop offset="0" stop-color="#000000" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  
+
+    <linearGradient id="wrook-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdf6e3"/>
+      <stop offset="0.5" stop-color="#efe3c4"/>
+      <stop offset="1" stop-color="#cdb98a"/>
+    </linearGradient>
+    <linearGradient id="wrook-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7e08a"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#8a6a12"/>
+    </linearGradient>
+    <radialGradient id="wrook-hi" cx="0.4" cy="0.32" r="0.62">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="wrook-sh" cx="0.68" cy="0.8" r="0.5">
+      <stop offset="0" stop-color="#000000" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  
+
+    <linearGradient id="brook-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6a5a48"/>
+      <stop offset="0.5" stop-color="#2e2618"/>
+      <stop offset="1" stop-color="#15100a"/>
+    </linearGradient>
+    <linearGradient id="brook-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7e08a"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#8a6a12"/>
+    </linearGradient>
+    <radialGradient id="brook-hi" cx="0.4" cy="0.32" r="0.62">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="brook-sh" cx="0.68" cy="0.8" r="0.5">
+      <stop offset="0" stop-color="#000000" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  
+
+    <linearGradient id="wknight-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdf6e3"/>
+      <stop offset="0.5" stop-color="#efe3c4"/>
+      <stop offset="1" stop-color="#cdb98a"/>
+    </linearGradient>
+    <linearGradient id="wknight-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7e08a"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#8a6a12"/>
+    </linearGradient>
+    <radialGradient id="wknight-hi" cx="0.4" cy="0.32" r="0.62">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="wknight-sh" cx="0.68" cy="0.8" r="0.5">
+      <stop offset="0" stop-color="#000000" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  
+
+    <linearGradient id="bknight-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6a5a48"/>
+      <stop offset="0.5" stop-color="#2e2618"/>
+      <stop offset="1" stop-color="#15100a"/>
+    </linearGradient>
+    <linearGradient id="bknight-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7e08a"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#8a6a12"/>
+    </linearGradient>
+    <radialGradient id="bknight-hi" cx="0.4" cy="0.32" r="0.62">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bknight-sh" cx="0.68" cy="0.8" r="0.5">
+      <stop offset="0" stop-color="#000000" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  
+
+    <linearGradient id="wbishop-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdf6e3"/>
+      <stop offset="0.5" stop-color="#efe3c4"/>
+      <stop offset="1" stop-color="#cdb98a"/>
+    </linearGradient>
+    <linearGradient id="wbishop-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7e08a"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#8a6a12"/>
+    </linearGradient>
+    <radialGradient id="wbishop-hi" cx="0.4" cy="0.32" r="0.62">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="wbishop-sh" cx="0.68" cy="0.8" r="0.5">
+      <stop offset="0" stop-color="#000000" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  
+
+    <linearGradient id="bbishop-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6a5a48"/>
+      <stop offset="0.5" stop-color="#2e2618"/>
+      <stop offset="1" stop-color="#15100a"/>
+    </linearGradient>
+    <linearGradient id="bbishop-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7e08a"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#8a6a12"/>
+    </linearGradient>
+    <radialGradient id="bbishop-hi" cx="0.4" cy="0.32" r="0.62">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bbishop-sh" cx="0.68" cy="0.8" r="0.5">
+      <stop offset="0" stop-color="#000000" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  
+
+    <linearGradient id="wqueen-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdf6e3"/>
+      <stop offset="0.5" stop-color="#efe3c4"/>
+      <stop offset="1" stop-color="#cdb98a"/>
+    </linearGradient>
+    <linearGradient id="wqueen-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7e08a"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#8a6a12"/>
+    </linearGradient>
+    <radialGradient id="wqueen-hi" cx="0.4" cy="0.32" r="0.62">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="wqueen-sh" cx="0.68" cy="0.8" r="0.5">
+      <stop offset="0" stop-color="#000000" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  
+
+    <linearGradient id="bqueen-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6a5a48"/>
+      <stop offset="0.5" stop-color="#2e2618"/>
+      <stop offset="1" stop-color="#15100a"/>
+    </linearGradient>
+    <linearGradient id="bqueen-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7e08a"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#8a6a12"/>
+    </linearGradient>
+    <radialGradient id="bqueen-hi" cx="0.4" cy="0.32" r="0.62">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bqueen-sh" cx="0.68" cy="0.8" r="0.5">
+      <stop offset="0" stop-color="#000000" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  
+
+    <linearGradient id="wking-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdf6e3"/>
+      <stop offset="0.5" stop-color="#efe3c4"/>
+      <stop offset="1" stop-color="#cdb98a"/>
+    </linearGradient>
+    <linearGradient id="wking-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7e08a"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#8a6a12"/>
+    </linearGradient>
+    <radialGradient id="wking-hi" cx="0.4" cy="0.32" r="0.62">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="wking-sh" cx="0.68" cy="0.8" r="0.5">
+      <stop offset="0" stop-color="#000000" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  
+
+    <linearGradient id="bking-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6a5a48"/>
+      <stop offset="0.5" stop-color="#2e2618"/>
+      <stop offset="1" stop-color="#15100a"/>
+    </linearGradient>
+    <linearGradient id="bking-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7e08a"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#8a6a12"/>
+    </linearGradient>
+    <radialGradient id="bking-hi" cx="0.4" cy="0.32" r="0.62">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bking-sh" cx="0.68" cy="0.8" r="0.5">
+      <stop offset="0" stop-color="#000000" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+<symbol id="mkj-piece-wpawn" viewBox="0 0 100 100">
+      
+    <circle cx="50" cy="30" r="13" fill="url(#wpawn-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <path d="M43 43 Q50 46 57 43 L59 51 Q50 54 41 51 Z" fill="url(#wpawn-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <path d="M44 51 L41 73 L59 73 L56 51 Z" fill="url(#wpawn-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <ellipse cx="50" cy="47.5" rx="9.5" ry="2.6" fill="url(#wpawn-gold)" opacity="0.95"/>
+    <ellipse cx="45" cy="25" rx="6" ry="4.5" fill="url(#wpawn-hi)"/>
+    <path d="M52 17 A13 13 0 0 1 52 43 A9 9 0 0 0 52 27 Z" fill="#000000" opacity="0.14"/>
+    
+    <ellipse cx="50" cy="91.5" rx="33" ry="5.5" fill="#000000" opacity="0.22"/>
+    <rect x="16" y="80" width="68" height="12" rx="6" fill="url(#wpawn-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="20" y="73" width="60" height="9" rx="4.5" fill="url(#wpawn-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="20" y="73.4" width="60" height="2.2" fill="url(#wpawn-gold)"/>
+    <text x="50" y="87.5" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="8" font-weight="700" letter-spacing="1.5" fill="#8a6a12">MKJ</text>
+  
+  
+    </symbol>
+    <symbol id="mkj-piece-bpawn" viewBox="0 0 100 100">
+      
+    <circle cx="50" cy="30" r="13" fill="url(#bpawn-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <path d="M43 43 Q50 46 57 43 L59 51 Q50 54 41 51 Z" fill="url(#bpawn-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <path d="M44 51 L41 73 L59 73 L56 51 Z" fill="url(#bpawn-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <ellipse cx="50" cy="47.5" rx="9.5" ry="2.6" fill="url(#bpawn-gold)" opacity="0.95"/>
+    <ellipse cx="45" cy="25" rx="6" ry="4.5" fill="url(#bpawn-hi)"/>
+    <path d="M52 17 A13 13 0 0 1 52 43 A9 9 0 0 0 52 27 Z" fill="#000000" opacity="0.14"/>
+    
+    <ellipse cx="50" cy="91.5" rx="33" ry="5.5" fill="#000000" opacity="0.22"/>
+    <rect x="16" y="80" width="68" height="12" rx="6" fill="url(#bpawn-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="20" y="73" width="60" height="9" rx="4.5" fill="url(#bpawn-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="20" y="73.4" width="60" height="2.2" fill="url(#bpawn-gold)"/>
+    <text x="50" y="87.5" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="8" font-weight="700" letter-spacing="1.5" fill="#8a6a12">MKJ</text>
+  
+  
+    </symbol>
+    <symbol id="mkj-piece-wrook" viewBox="0 0 100 100">
+      
+    <path d="M33 40 L67 40 L63 73 L37 73 Z" fill="url(#wrook-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="34" y="28" width="9" height="12" rx="1.5" fill="url(#wrook-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="45.5" y="26" width="9" height="14" rx="1.5" fill="url(#wrook-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="57" y="28" width="9" height="12" rx="1.5" fill="url(#wrook-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="35" y="41" width="30" height="3" rx="1.5" fill="url(#wrook-gold)"/>
+    <rect x="36" y="44" width="8" height="26" rx="3" fill="url(#wrook-hi)"/>
+    
+    <ellipse cx="50" cy="91.5" rx="33" ry="5.5" fill="#000000" opacity="0.22"/>
+    <rect x="16" y="80" width="68" height="12" rx="6" fill="url(#wrook-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="20" y="73" width="60" height="9" rx="4.5" fill="url(#wrook-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="20" y="73.4" width="60" height="2.2" fill="url(#wrook-gold)"/>
+    <text x="50" y="87.5" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="8" font-weight="700" letter-spacing="1.5" fill="#8a6a12">MKJ</text>
+  
+  
+    </symbol>
+    <symbol id="mkj-piece-brook" viewBox="0 0 100 100">
+      
+    <path d="M33 40 L67 40 L63 73 L37 73 Z" fill="url(#brook-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="34" y="28" width="9" height="12" rx="1.5" fill="url(#brook-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="45.5" y="26" width="9" height="14" rx="1.5" fill="url(#brook-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="57" y="28" width="9" height="12" rx="1.5" fill="url(#brook-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="35" y="41" width="30" height="3" rx="1.5" fill="url(#brook-gold)"/>
+    <rect x="36" y="44" width="8" height="26" rx="3" fill="url(#brook-hi)"/>
+    
+    <ellipse cx="50" cy="91.5" rx="33" ry="5.5" fill="#000000" opacity="0.22"/>
+    <rect x="16" y="80" width="68" height="12" rx="6" fill="url(#brook-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="20" y="73" width="60" height="9" rx="4.5" fill="url(#brook-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="20" y="73.4" width="60" height="2.2" fill="url(#brook-gold)"/>
+    <text x="50" y="87.5" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="8" font-weight="700" letter-spacing="1.5" fill="#8a6a12">MKJ</text>
+  
+  
+    </symbol>
+    <symbol id="mkj-piece-wknight" viewBox="0 0 100 100">
+      
+    <path d="M40 73 L42 42 C42 38 45 36 49 36 C53 36 56 38 56 42 L58 73 Z" fill="url(#wknight-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <path d="M56 36 C56 32 53 29 49 29 C45 29 42 32 42 36 C42 39 39 41 35 42 C31 43 28 46 28 50 C28 53 31 55 35 55 C39 55 42 53 44 51 L52 45 C54 43 56 41 57 39 C58 37 58 36 56 36 Z" fill="url(#wknight-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <path d="M52 29 L55 25 L57 30 Z" fill="url(#wknight-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <path d="M56 36 C59 38 60 42 58 45 C60 43 61 40 60 37 Z" fill="#cdb98a" opacity="0.5"/>
+    <circle cx="44" cy="40" r="1.8" fill="#8a7349"/>
+    <path d="M53 28 L55 26 L56 29 Z" fill="url(#wknight-gold)"/>
+    <ellipse cx="48" cy="33" rx="5" ry="3.5" fill="url(#wknight-hi)"/>
+    
+    <ellipse cx="50" cy="91.5" rx="33" ry="5.5" fill="#000000" opacity="0.22"/>
+    <rect x="16" y="80" width="68" height="12" rx="6" fill="url(#wknight-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="20" y="73" width="60" height="9" rx="4.5" fill="url(#wknight-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="20" y="73.4" width="60" height="2.2" fill="url(#wknight-gold)"/>
+    <text x="50" y="87.5" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="8" font-weight="700" letter-spacing="1.5" fill="#8a6a12">MKJ</text>
+  
+  
+    </symbol>
+    <symbol id="mkj-piece-bknight" viewBox="0 0 100 100">
+      
+    <path d="M40 73 L42 42 C42 38 45 36 49 36 C53 36 56 38 56 42 L58 73 Z" fill="url(#bknight-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <path d="M56 36 C56 32 53 29 49 29 C45 29 42 32 42 36 C42 39 39 41 35 42 C31 43 28 46 28 50 C28 53 31 55 35 55 C39 55 42 53 44 51 L52 45 C54 43 56 41 57 39 C58 37 58 36 56 36 Z" fill="url(#bknight-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <path d="M52 29 L55 25 L57 30 Z" fill="url(#bknight-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <path d="M56 36 C59 38 60 42 58 45 C60 43 61 40 60 37 Z" fill="#15100a" opacity="0.5"/>
+    <circle cx="44" cy="40" r="1.8" fill="#0a0604"/>
+    <path d="M53 28 L55 26 L56 29 Z" fill="url(#bknight-gold)"/>
+    <ellipse cx="48" cy="33" rx="5" ry="3.5" fill="url(#bknight-hi)"/>
+    
+    <ellipse cx="50" cy="91.5" rx="33" ry="5.5" fill="#000000" opacity="0.22"/>
+    <rect x="16" y="80" width="68" height="12" rx="6" fill="url(#bknight-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="20" y="73" width="60" height="9" rx="4.5" fill="url(#bknight-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="20" y="73.4" width="60" height="2.2" fill="url(#bknight-gold)"/>
+    <text x="50" y="87.5" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="8" font-weight="700" letter-spacing="1.5" fill="#8a6a12">MKJ</text>
+  
+  
+    </symbol>
+    <symbol id="mkj-piece-wbishop" viewBox="0 0 100 100">
+      
+    <path d="M50 15 C39 15 32 24 32 33 C32 41 39 47 50 47 C61 47 68 41 68 33 C68 24 61 15 50 15 Z" fill="url(#wbishop-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <path d="M50 19 L46 38 L54 38 Z" fill="#8a7349" opacity="0.55"/>
+    <path d="M40 47 L60 47 L58 55 L42 55 Z" fill="url(#wbishop-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <path d="M44 55 L42 73 L58 73 L56 55 Z" fill="url(#wbishop-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <ellipse cx="50" cy="51" rx="9.5" ry="2.6" fill="url(#wbishop-gold)" opacity="0.95"/>
+    <circle cx="50" cy="15" r="3" fill="url(#wbishop-gold)" stroke="#8a7349" stroke-width="1"/>
+    <ellipse cx="44" cy="27" rx="6" ry="8" fill="url(#wbishop-hi)"/>
+    
+    <ellipse cx="50" cy="91.5" rx="33" ry="5.5" fill="#000000" opacity="0.22"/>
+    <rect x="16" y="80" width="68" height="12" rx="6" fill="url(#wbishop-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="20" y="73" width="60" height="9" rx="4.5" fill="url(#wbishop-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="20" y="73.4" width="60" height="2.2" fill="url(#wbishop-gold)"/>
+    <text x="50" y="87.5" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="8" font-weight="700" letter-spacing="1.5" fill="#8a6a12">MKJ</text>
+  
+  
+    </symbol>
+    <symbol id="mkj-piece-bbishop" viewBox="0 0 100 100">
+      
+    <path d="M50 15 C39 15 32 24 32 33 C32 41 39 47 50 47 C61 47 68 41 68 33 C68 24 61 15 50 15 Z" fill="url(#bbishop-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <path d="M50 19 L46 38 L54 38 Z" fill="#0a0604" opacity="0.55"/>
+    <path d="M40 47 L60 47 L58 55 L42 55 Z" fill="url(#bbishop-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <path d="M44 55 L42 73 L58 73 L56 55 Z" fill="url(#bbishop-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <ellipse cx="50" cy="51" rx="9.5" ry="2.6" fill="url(#bbishop-gold)" opacity="0.95"/>
+    <circle cx="50" cy="15" r="3" fill="url(#bbishop-gold)" stroke="#0a0604" stroke-width="1"/>
+    <ellipse cx="44" cy="27" rx="6" ry="8" fill="url(#bbishop-hi)"/>
+    
+    <ellipse cx="50" cy="91.5" rx="33" ry="5.5" fill="#000000" opacity="0.22"/>
+    <rect x="16" y="80" width="68" height="12" rx="6" fill="url(#bbishop-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="20" y="73" width="60" height="9" rx="4.5" fill="url(#bbishop-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="20" y="73.4" width="60" height="2.2" fill="url(#bbishop-gold)"/>
+    <text x="50" y="87.5" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="8" font-weight="700" letter-spacing="1.5" fill="#8a6a12">MKJ</text>
+  
+  
+    </symbol>
+    <symbol id="mkj-piece-wqueen" viewBox="0 0 100 100">
+      
+    <path d="M36 38 L64 38 L60 73 L40 73 Z" fill="url(#wqueen-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="33" y="30" width="34" height="9" rx="2" fill="url(#wqueen-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <circle cx="36" cy="28" r="3.5" fill="url(#wqueen-gold)" stroke="#8a7349" stroke-width="1"/>
+    <circle cx="44.5" cy="25" r="4" fill="url(#wqueen-gold)" stroke="#8a7349" stroke-width="1"/>
+    <circle cx="50" cy="23" r="4.5" fill="url(#wqueen-gold)" stroke="#8a7349" stroke-width="1"/>
+    <circle cx="55.5" cy="25" r="4" fill="url(#wqueen-gold)" stroke="#8a7349" stroke-width="1"/>
+    <circle cx="64" cy="28" r="3.5" fill="url(#wqueen-gold)" stroke="#8a7349" stroke-width="1"/>
+    <rect x="38" y="40" width="24" height="3" rx="1.5" fill="url(#wqueen-gold)"/>
+    <ellipse cx="44" cy="34" rx="6" ry="14" fill="url(#wqueen-hi)"/>
+    
+    <ellipse cx="50" cy="91.5" rx="33" ry="5.5" fill="#000000" opacity="0.22"/>
+    <rect x="16" y="80" width="68" height="12" rx="6" fill="url(#wqueen-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="20" y="73" width="60" height="9" rx="4.5" fill="url(#wqueen-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="20" y="73.4" width="60" height="2.2" fill="url(#wqueen-gold)"/>
+    <text x="50" y="87.5" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="8" font-weight="700" letter-spacing="1.5" fill="#8a6a12">MKJ</text>
+  
+  
+    </symbol>
+    <symbol id="mkj-piece-bqueen" viewBox="0 0 100 100">
+      
+    <path d="M36 38 L64 38 L60 73 L40 73 Z" fill="url(#bqueen-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="33" y="30" width="34" height="9" rx="2" fill="url(#bqueen-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <circle cx="36" cy="28" r="3.5" fill="url(#bqueen-gold)" stroke="#0a0604" stroke-width="1"/>
+    <circle cx="44.5" cy="25" r="4" fill="url(#bqueen-gold)" stroke="#0a0604" stroke-width="1"/>
+    <circle cx="50" cy="23" r="4.5" fill="url(#bqueen-gold)" stroke="#0a0604" stroke-width="1"/>
+    <circle cx="55.5" cy="25" r="4" fill="url(#bqueen-gold)" stroke="#0a0604" stroke-width="1"/>
+    <circle cx="64" cy="28" r="3.5" fill="url(#bqueen-gold)" stroke="#0a0604" stroke-width="1"/>
+    <rect x="38" y="40" width="24" height="3" rx="1.5" fill="url(#bqueen-gold)"/>
+    <ellipse cx="44" cy="34" rx="6" ry="14" fill="url(#bqueen-hi)"/>
+    
+    <ellipse cx="50" cy="91.5" rx="33" ry="5.5" fill="#000000" opacity="0.22"/>
+    <rect x="16" y="80" width="68" height="12" rx="6" fill="url(#bqueen-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="20" y="73" width="60" height="9" rx="4.5" fill="url(#bqueen-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="20" y="73.4" width="60" height="2.2" fill="url(#bqueen-gold)"/>
+    <text x="50" y="87.5" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="8" font-weight="700" letter-spacing="1.5" fill="#8a6a12">MKJ</text>
+  
+  
+    </symbol>
+    <symbol id="mkj-piece-wking" viewBox="0 0 100 100">
+      
+    <path d="M36 42 L64 42 L60 73 L40 73 Z" fill="url(#wking-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <path d="M34 42 L66 42 L64 34 L36 34 Z" fill="url(#wking-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="36" y="30" width="5" height="5" rx="1" fill="url(#wking-gold)"/>
+    <rect x="47.5" y="28" width="5" height="7" rx="1" fill="url(#wking-gold)"/>
+    <rect x="59" y="30" width="5" height="5" rx="1" fill="url(#wking-gold)"/>
+    <rect x="48" y="6" width="4" height="16" rx="1.5" fill="url(#wking-gold)" stroke="#8a7349" stroke-width="1"/>
+    <rect x="42" y="9" width="16" height="4" rx="1.5" fill="url(#wking-gold)" stroke="#8a7349" stroke-width="1"/>
+    <rect x="40" y="44" width="20" height="3" rx="1.5" fill="url(#wking-gold)"/>
+    <ellipse cx="44" cy="38" rx="6" ry="14" fill="url(#wking-hi)"/>
+    
+    <ellipse cx="50" cy="91.5" rx="33" ry="5.5" fill="#000000" opacity="0.22"/>
+    <rect x="16" y="80" width="68" height="12" rx="6" fill="url(#wking-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="20" y="73" width="60" height="9" rx="4.5" fill="url(#wking-body)" stroke="#8a7349" stroke-width="1.5"/>
+    <rect x="20" y="73.4" width="60" height="2.2" fill="url(#wking-gold)"/>
+    <text x="50" y="87.5" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="8" font-weight="700" letter-spacing="1.5" fill="#8a6a12">MKJ</text>
+  
+  
+    </symbol>
+    <symbol id="mkj-piece-bking" viewBox="0 0 100 100">
+      
+    <path d="M36 42 L64 42 L60 73 L40 73 Z" fill="url(#bking-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <path d="M34 42 L66 42 L64 34 L36 34 Z" fill="url(#bking-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="36" y="30" width="5" height="5" rx="1" fill="url(#bking-gold)"/>
+    <rect x="47.5" y="28" width="5" height="7" rx="1" fill="url(#bking-gold)"/>
+    <rect x="59" y="30" width="5" height="5" rx="1" fill="url(#bking-gold)"/>
+    <rect x="48" y="6" width="4" height="16" rx="1.5" fill="url(#bking-gold)" stroke="#0a0604" stroke-width="1"/>
+    <rect x="42" y="9" width="16" height="4" rx="1.5" fill="url(#bking-gold)" stroke="#0a0604" stroke-width="1"/>
+    <rect x="40" y="44" width="20" height="3" rx="1.5" fill="url(#bking-gold)"/>
+    <ellipse cx="44" cy="38" rx="6" ry="14" fill="url(#bking-hi)"/>
+    
+    <ellipse cx="50" cy="91.5" rx="33" ry="5.5" fill="#000000" opacity="0.22"/>
+    <rect x="16" y="80" width="68" height="12" rx="6" fill="url(#bking-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="20" y="73" width="60" height="9" rx="4.5" fill="url(#bking-body)" stroke="#0a0604" stroke-width="1.5"/>
+    <rect x="20" y="73.4" width="60" height="2.2" fill="url(#bking-gold)"/>
+    <text x="50" y="87.5" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="8" font-weight="700" letter-spacing="1.5" fill="#8a6a12">MKJ</text>
+  
+  
+    </symbol>
+
+    <!-- UI icons (24x24, stroke-based) -->
+    <symbol id="mkj-icon-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="6 4 20 12 6 20 6 4" fill="currentColor" stroke="none"/>
+    </symbol>
+    <symbol id="mkj-icon-cpu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="5" y="6" width="14" height="12" rx="2"/>
+      <path d="M9 2v3M15 2v3M9 18v3M15 18v3"/>
+      <path d="M9.5 10h5v4h-5z"/>
+    </symbol>
+    <symbol id="mkj-icon-people" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="8" cy="9" r="3"/>
+      <circle cx="16" cy="9" r="3"/>
+      <path d="M2 19c0-3 3-5 6-5s6 2 6 5"/>
+      <path d="M16 19c0-3 3-5 6-5s3 2 3 5"/>
+    </symbol>
+    <symbol id="mkj-icon-puzzle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 3a3 3 0 1 1 2 5h2a3 3 0 1 1 0 4 3 3 0 0 0-2 5v1h-4v-1a3 3 0 0 0-2-5 3 3 0 1 1 0-4 3 3 0 0 0 2-5V3z"/>
+    </symbol>
+    <symbol id="mkj-icon-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H12v18H5.5A1.5 1.5 0 0 0 4 22.5z"/>
+      <path d="M20 4.5A1.5 1.5 0 0 0 18.5 3H12v18h6.5a1.5 1.5 0 0 1 1.5 1.5z"/>
+      <path d="M12 3v18"/>
+    </symbol>
+    <symbol id="mkj-icon-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>
+    </symbol>
+    <symbol id="mkj-icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </symbol>
+    <symbol id="mkj-icon-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M12 16v-5M12 8h.01"/>
+    </symbol>
+    <symbol id="mkj-icon-undo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 7v6h6"/>
+      <path d="M3.5 13a9 9 0 1 0 2.13-9.36L3 7"/>
+    </symbol>
+    <symbol id="mkj-icon-redo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 7v6h-6"/>
+      <path d="M20.5 13a9 9 0 1 1-2.13-9.36L21 7"/>
+    </symbol>
+    <symbol id="mkj-icon-flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3v18M7 8l-4 4 4 4M17 8l4 4-4 4"/>
+    </symbol>
+    <symbol id="mkj-icon-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
+      <path d="M21 3v6h-6"/>
+    </symbol>
+    <symbol id="mkj-icon-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 18l-6-6 6-6"/>
+    </symbol>
+    <symbol id="mkj-icon-resign" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M5.6 5.6l12.8 12.8"/>
+    </symbol>
+    <symbol id="mkj-icon-draw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M7.5 7.5l9 9"/>
+    </symbol>
+    <symbol id="mkj-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 6l12 12M18 6L6 18"/>
+    </symbol>
+    <symbol id="mkj-icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 13l4 4L19 7"/>
+    </symbol>
+    <symbol id="mkj-icon-sound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 5L6 9H3v6h3l5 4z"/>
+      <path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>
+    </symbol>
+    <symbol id="mkj-icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 5L6 9H3v6h3l5 4z"/>
+      <path d="M17 9l4 4M21 9l-4 4"/>
+    </symbol>
+    <symbol id="mkj-icon-swap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M7 4L3 8l4 4"/>
+      <path d="M3 8h14a4 4 0 0 1 0 8h-3"/>
+      <path d="M17 20l4-4-4-4"/>
+    </symbol>
+    <symbol id="mkj-icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="12" height="12" rx="2"/>
+      <path d="M5 15V5a2 2 0 0 1 2-2h10"/>
+    </symbol>
+    <symbol id="mkj-icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3v12M7 10l5 5 5-5"/>
+      <path d="M4 21h16"/>
+    </symbol>
+    <symbol id="mkj-icon-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 16V4M7 9l5-5 5 5"/>
+      <path d="M4 21h16"/>
+    </symbol>
+    <symbol id="mkj-icon-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 21V4M4 5h13l-2 3 2 3H4"/>
+    </symbol>
+    <symbol id="mkj-icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M12 7v5l3 2"/>
+    </symbol>
+    <symbol id="mkj-icon-logo" viewBox="0 0 64 64">
+      <rect x="3" y="3" width="58" height="58" rx="14" fill="none" stroke="currentColor" stroke-width="2.5"/>
+      <text x="32" y="45" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="34" font-weight="700" fill="currentColor">MKJ</text>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ==================== LOADING SCREEN ==================== -->
+<div id="mkj-loader" class="mkj-loader" role="status" aria-live="polite">
+  <div class="mkj-loader__logo" aria-hidden="true">MKJ</div>
+  <h1 class="mkj-loader__title">MKJ CHESS</h1>
+  <p class="mkj-loader__tagline">Think. Calculate. Conquer.</p>
+  <div class="mkj-loader__bar"><span id="mkj-loader-fill"></span></div>
+  <p class="mkj-loader__status" id="mkj-loader-status">Preparing the board…</p>
+</div>
+
+<!-- ==================== APP ==================== -->
+<div id="mkj-app" class="mkj-app is-hidden" role="application" aria-label="MKJ Chess">
+
+  <!-- ---------- TOP BAR ---------- -->
+  <header class="mkj-topbar">
+    <button class="mkj-iconbtn" id="mkj-btn-home" title="Back to MKJ Chess home" aria-label="Back to MKJ Chess home">
+      <svg class="mkj-ico"><use href="#mkj-icon-back"/></svg>
+    </button>
+    <div class="mkj-topbar__brand">
+      <span class="mkj-logo" aria-hidden="true">MKJ</span>
+      <span class="mkj-topbar__name">MKJ Chess</span>
+    </div>
+    <div class="mkj-topbar__actions">
+      <button class="mkj-iconbtn" id="mkj-btn-sound" title="Toggle sound" aria-label="Toggle sound" aria-pressed="true">
+        <svg class="mkj-ico"><use href="#mkj-icon-sound"/></svg>
+      </button>
+      <button class="mkj-iconbtn" id="mkj-btn-settings" title="Settings" aria-label="Open settings">
+        <svg class="mkj-ico"><use href="#mkj-icon-settings"/></svg>
+      </button>
+      <button class="mkj-iconbtn" id="mkj-btn-stats" title="Statistics" aria-label="Open statistics">
+        <svg class="mkj-ico"><use href="#mkj-icon-chart"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="mkj-main" id="mkj-main">
+
+    <!-- ========== HOME ========== -->
+    <section class="mkj-screen mkj-screen--home is-active" id="mkj-screen-home" aria-labelledby="mkj-home-title">
+      <div class="mkj-home">
+        <div class="mkj-hero">
+          <div class="mkj-hero__logo" aria-hidden="true">MKJ</div>
+          <h1 class="mkj-hero__title" id="mkj-home-title">MKJ CHESS</h1>
+          <p class="mkj-hero__tagline">Think. Calculate. Conquer.</p>
+          <p class="mkj-hero__note">A complete offline chess platform. Created by MKJ.</p>
+        </div>
+
+        <div class="mkj-home__primary">
+          <button class="mkj-btn mkj-btn--primary mkj-btn--xl" id="mkj-btn-play">
+            <svg class="mkj-ico mkj-ico--inline"><use href="#mkj-icon-play"/></svg>
+            Play
+          </button>
+        </div>
+
+        <div class="mkj-menu" role="menu" aria-label="Choose a game mode">
+          <button class="mkj-menuitem" data-mode="local" role="menuitem">
+            <span class="mkj-menuitem__ico"><svg class="mkj-ico"><use href="#mkj-icon-people"/></svg></span>
+            <span class="mkj-menuitem__body"><strong>Local 1v1</strong><small>Two players, one device</small></span>
+          </button>
+          <button class="mkj-menuitem" data-mode="computer" role="menuitem">
+            <span class="mkj-menuitem__ico"><svg class="mkj-ico"><use href="#mkj-icon-cpu"/></svg></span>
+            <span class="mkj-menuitem__body"><strong>Play vs Computer</strong><small>Six difficulty levels</small></span>
+          </button>
+          <button class="mkj-menuitem" data-mode="passplay" role="menuitem">
+            <span class="mkj-menuitem__ico"><svg class="mkj-ico"><use href="#mkj-icon-people"/></svg></span>
+            <span class="mkj-menuitem__body"><strong>Pass &amp; Play</strong><small>Quick local 1v1 setup</small></span>
+          </button>
+          <button class="mkj-menuitem" data-mode="puzzles" role="menuitem">
+            <span class="mkj-menuitem__ico"><svg class="mkj-ico"><use href="#mkj-icon-puzzle"/></svg></span>
+            <span class="mkj-menuitem__body"><strong>Puzzles</strong><small>Solve tactical puzzles</small></span>
+          </button>
+          <button class="mkj-menuitem" data-mode="practice" role="menuitem">
+            <span class="mkj-menuitem__ico"><svg class="mkj-ico"><use href="#mkj-icon-book"/></svg></span>
+            <span class="mkj-menuitem__body"><strong>Practice Board</strong><small>Free play from any position</small></span>
+          </button>
+        </div>
+
+        <div class="mkj-home__secondary">
+          <button class="mkj-btn mkj-btn--ghost" id="mkj-btn-stats-home">
+            <svg class="mkj-ico mkj-ico--inline"><use href="#mkj-icon-chart"/></svg> Statistics
+          </button>
+          <button class="mkj-btn mkj-btn--ghost" id="mkj-btn-about">
+            <svg class="mkj-ico mkj-ico--inline"><use href="#mkj-icon-info"/></svg> About MKJ Chess
+          </button>
+        </div>
+
+        <div class="mkj-recent" id="mkj-recent">
+          <h2 class="mkj-section-title">Recent games</h2>
+          <p class="mkj-muted" id="mkj-recent-empty">No games played yet. Your history will appear here.</p>
+          <ul class="mkj-recent__list" id="mkj-recent-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== MODE SELECT ========== -->
+    <section class="mkj-screen" id="mkj-screen-mode" aria-labelledby="mkj-mode-title">
+      <h1 class="mkj-screen__title" id="mkj-mode-title">Choose a game</h1>
+      <p class="mkj-screen__subtitle" id="mkj-mode-subtitle">Pick your way to play chess.</p>
+      <div class="mkj-modegrid" id="mkj-modegrid"></div>
+    </section>
+
+    <!-- ========== GAME ========== -->
+    <section class="mkj-screen" id="mkj-screen-game" aria-labelledby="mkj-game-title">
+      <div class="mkj-gamelayout">
+        <div class="mkj-gamelayout__boardcol">
+          <div class="mkj-playerpanel" id="mkj-player-top"></div>
+          <div class="mkj-boardwrap" id="mkj-boardwrap">
+            <div class="mkj-checkbanner" id="mkj-checkbanner" aria-live="assertive">
+              <svg class="mkj-ico"><use href="#mkj-icon-flag"/></svg>
+              <span id="mkj-checkbanner-text">Check!</span>
+            </div>
+            <div class="mkj-board" id="mkj-board" role="grid" aria-label="Chessboard"></div>
+          </div>
+          <div class="mkj-gamebar" id="mkj-gamebar"></div>
+        </div>
+
+        <aside class="mkj-gamepanel" id="mkj-gamepanel" aria-label="Game details">
+          <div class="mkj-tabs" role="tablist" id="mkj-tabs">
+            <button class="mkj-tab is-active" role="tab" aria-selected="true" data-tab="history">Moves</button>
+            <button class="mkj-tab" role="tab" aria-selected="false" data-tab="info">Info</button>
+            <button class="mkj-tab" role="tab" aria-selected="false" data-tab="hint">Hint</button>
+          </div>
+          <div class="mkj-tabpanel" id="mkj-panel-history" role="tabpanel">
+            <ol class="mkj-movelist" id="mkj-movelist"></ol>
+            <div class="mkj-panel__actions">
+              <button class="mkj-btn mkj-btn--ghost" id="mkj-btn-copy-fen"><svg class="mkj-ico mkj-ico--inline"><use href="#mkj-icon-copy"/></svg> Copy FEN</button>
+              <button class="mkj-btn mkj-btn--ghost" id="mkj-btn-export-pgn"><svg class="mkj-ico mkj-ico--inline"><use href="#mkj-icon-download"/></svg> Export PGN</button>
+              <button class="mkj-btn mkj-btn--ghost" id="mkj-btn-import"><svg class="mkj-ico mkj-ico--inline"><use href="#mkj-icon-upload"/></svg> Import PGN / FEN</button>
+            </div>
+          </div>
+          <div class="mkj-tabpanel is-hidden" id="mkj-panel-info" role="tabpanel"></div>
+          <div class="mkj-tabpanel is-hidden" id="mkj-panel-hint" role="tabpanel"></div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ========== SETTINGS ========== -->
+    <section class="mkj-screen" id="mkj-screen-settings" aria-labelledby="mkj-settings-title">
+      <h1 class="mkj-screen__title" id="mkj-settings-title">Settings</h1>
+      <p class="mkj-screen__subtitle">All preferences are stored locally on this device.</p>
+      <div class="mkj-settings" id="mkj-settings"></div>
+    </section>
+
+    <!-- ========== STATS ========== -->
+    <section class="mkj-screen" id="mkj-screen-stats" aria-labelledby="mkj-stats-title">
+      <h1 class="mkj-screen__title" id="mkj-stats-title">Statistics</h1>
+      <p class="mkj-screen__subtitle">Recorded locally. Nothing is sent anywhere.</p>
+      <div class="mkj-stats" id="mkj-stats"></div>
+    </section>
+
+    <!-- ========== ABOUT ========== -->
+    <section class="mkj-screen" id="mkj-screen-about" aria-labelledby="mkj-about-title">
+      <div class="mkj-about">
+        <div class="mkj-hero__logo mkj-hero__logo--lg" aria-hidden="true">MKJ</div>
+        <h1 class="mkj-screen__title" id="mkj-about-title">MKJ CHESS</h1>
+        <p class="mkj-hero__tagline">Think. Calculate. Conquer.</p>
+        <div class="mkj-card" id="mkj-about-body"></div>
+        <div class="mkj-credit">Created by <strong>MKJ</strong> — a personal flagship chess project.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="mkj-footer">
+    <span class="mkj-footer__logo" aria-hidden="true">MKJ</span>
+    <span class="mkj-footer__text">MKJ Chess — created by MKJ</span>
+    <span class="mkj-footer__text mkj-footer__offline" id="mkj-offline-badge">Offline ready</span>
+  </footer>
+</div>
+
+<!-- ==================== DIALOGS ==================== -->
+<div class="mkj-modal-root" id="mkj-modal-root" aria-live="polite"></div>
+<div class="mkj-toast-root" id="mkj-toast-root" aria-live="polite" aria-atomic="false"></div>
+
+<div class="mkj-promotion" id="mkj-promotion" role="dialog" aria-modal="true" aria-label="Choose a piece for the promotion" is-hidden>
+  <div class="mkj-promotion__inner">
+    <h2 class="mkj-promotion__title">Promotion</h2>
+    <p class="mkj-promotion__sub">Choose a piece for your pawn</p>
+    <div class="mkj-promotion__choices" id="mkj-promotion-choices"></div>
+  </div>
+</div>
+
+<script type="module" src="script.js"></script>
+<noscript>
+  <div class="mkj-nojs">
+    <h1>MKJ Chess</h1>
+    <p>MKJ Chess needs JavaScript to run. Please enable JavaScript in your browser and reload the page.</p>
+    <p>The application is fully offline once loaded, but it does need a browser that supports JavaScript and ES modules.</p>
+  </div>
+</noscript>
+</body>
+</html>
