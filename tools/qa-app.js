@@ -179,6 +179,9 @@ function makeController(fen, mode = 'local', startOpts = {}) {
     autoFifty: true,
   };
   const c = new GameController({ board, sound, settings, ...hooks });
+  // Wire the board's square-click callback to the controller (used by the
+  // pointer drag/tap handlers, not by direct handleSquareClick calls).
+  board.options.onSquareClick = (sq) => c.handleSquareClick(sq);
   c.start({ mode, fen: fen || undefined, ...startOpts });
   return { c, board, el };
 }
@@ -273,6 +276,35 @@ function makeController(fen, mode = 'local', startOpts = {}) {
   check('L2', 'computer (black) responded', t.c.game.history.length === 2, `got ${t.c.game.history.length}`);
   check('L2', 'turn back to white after computer move', t.c.game.position.turn === 'w', `got ${t.c.game.position.turn}`);
   check('L2', 'computer not thinking', t.c.thinking === false);
+}
+
+// --- Drag & drop (pointer events; jsdom has no layout so the drop target
+//     computes to -1, but we verify tap-select, drag-lift and cleanup) ---
+{
+  const t = makeController();
+  const pawn = t.board.pieces[12]; // e2 pawn
+  const PE = (type, x, y, id) => new window.PointerEvent(type, { clientX: x, clientY: y, pointerId: id, bubbles: true });
+
+  // Tap: pointerdown + pointerup, no movement → selects (same as a click).
+  pawn.dispatchEvent(PE('pointerdown', 100, 100, 1));
+  window.dispatchEvent(PE('pointerup', 100, 100, 1));
+  check('L2', 'tap (pointerdown+up) selects piece', t.board.selected === 12, `got ${t.board.selected}`);
+
+  // Tap again → deselects.
+  pawn.dispatchEvent(PE('pointerdown', 100, 100, 2));
+  window.dispatchEvent(PE('pointerup', 100, 100, 2));
+  check('L2', 'second tap deselects', t.board.selected === -1, `got ${t.board.selected}`);
+
+  // Drag: pointerdown + pointermove (> 6px) → selects + lifts the piece.
+  pawn.dispatchEvent(PE('pointerdown', 100, 100, 3));
+  window.dispatchEvent(PE('pointermove', 140, 100, 3));
+  check('L2', 'drag movement selects piece', t.board.selected === 12, `got ${t.board.selected}`);
+  check('L2', 'dragging piece has is-dragging class', pawn.classList.contains('is-dragging'));
+
+  // Drag end at an invalid location (jsdom returns -1) → no move, cleanup.
+  window.dispatchEvent(PE('pointerup', 140, 100, 3));
+  check('L2', 'drag end removes is-dragging', !pawn.classList.contains('is-dragging'));
+  check('L2', 'no move on invalid drop', t.c.game.history.length === 0, `got ${t.c.game.history.length}`);
 }
 
 /* ========================================================================= */
