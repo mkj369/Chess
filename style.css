@@ -761,7 +761,9 @@ button { font-family: inherit; font-size: inherit; color: inherit; }
 [data-piece-anim='off'] .mkj-piece { transition: none !important; }
 .mkj-piece:active { cursor: grabbing; }
 
+.mkj-piece svg,
 .mkj-piece use { width: 100%; height: 100%; display: block; }
+.mkj-piece svg { overflow: visible; }
 
 /* Lift while being dragged. */
 .mkj-piece.is-dragging {

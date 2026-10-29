@@ -429,10 +429,10 @@ function renderModeSelect() {
   const pp = el('div', { class: 'mkj-modecard' });
   pp.appendChild(el('div', { class: 'mkj-modecard__head' }, [
     el('span', { class: 'mkj-modecard__ico', html: `<svg class="mkj-ico"><use href="#mkj-icon-people"/></svg>` }),
-    el('span', { class: 'mkj-modecard__title', text: 'Pass &amp; Play' }),
+    el('span', { class: 'mkj-modecard__title', text: 'Pass & Play' }),
   ]));
   pp.appendChild(el('p', { class: 'mkj-modecard__desc', text: 'Same as Local 1v1 but with a quick random colour assignment. Hand the device over when it is your turn.' }));
-  pp.appendChild(el('button', { class: 'mkj-btn mkj-btn--primary mkj-btn--block', type: 'button', onclick: () => startGame('passplay') }, ['Pass &amp; Play']));
+  pp.appendChild(el('button', { class: 'mkj-btn mkj-btn--primary mkj-btn--block', type: 'button', onclick: () => startGame('passplay') }, ['Pass & Play']));
   grid.appendChild(pp);
 
   /* ---------- Puzzles ---------- */

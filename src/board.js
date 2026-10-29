@@ -190,10 +190,21 @@ export class BoardView {
       if (move && sq === movedTo) continue; // already handled by movePiece
       const existing = this.pieces[sq];
       if (existing) {
+        this._updatePieceVisual(existing, piece);
         this._reposition(existing, sq);
       } else {
         this.createPiece(sq);
       }
+    }
+  }
+
+  /** Update a piece element's sprite reference when the piece type changed
+   *  (e.g. after undo/redo of a promotion, or a piece swap). */
+  _updatePieceVisual(node, piece) {
+    const expected = `#${pieceSymbol(piece)}`;
+    const use = node.querySelector('use');
+    if (use && use.getAttribute('href') !== expected) {
+      use.setAttribute('href', expected);
     }
   }
 
@@ -221,12 +232,7 @@ export class BoardView {
     setTimeout(() => node.classList.remove('is-moving'), 320);
     // Promotions change the piece type (pawn -> queen/rook/bishop/knight);
     // refresh the sprite reference so the promoted piece renders correctly.
-    const newPiece = this.board[toSq];
-    const expected = `#${pieceSymbol(newPiece)}`;
-    const use = node.querySelector('use');
-    if (use && use.getAttribute('href') !== expected) {
-      use.setAttribute('href', expected);
-    }
+    this._updatePieceVisual(node, this.board[toSq]);
   }
 
   /* ==================== Drag and drop ==================== */
